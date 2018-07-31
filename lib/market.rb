@@ -17,8 +17,8 @@ class Market
   end
 
   def vendors_that_sell(item)
-    @vendors.map do |vendor|
-      vendor if vendor.inventory.keys.include?(item)
+    @vendors.find_all do |vendor|
+      vendor.inventory.keys.include?(item)
     end.compact
   end
 
@@ -40,7 +40,6 @@ class Market
   end
 
   def sell(item, quantity)
-    total_inventory
     if total_inventory[item] >= quantity
       move_stock(item, quantity)
       true
@@ -51,11 +50,11 @@ class Market
 
   def move_stock(sold, demand)
     @vendors.each do |vendor|
-      if vendor.inventory.keys.include?(sold) && vendor.inventory[sold] >= demand
+      if vendor.check_stock(sold) >= demand
         vendor.inventory[sold] -= demand
         demand = 0
-      elsif vendor.inventory.keys.include?(sold)
-        difference = demand - vendor.inventory[sold]
+      else
+        difference = demand - vendor.check_stock(sold)
         vendor.inventory[sold] = 0
         demand = difference
       end
