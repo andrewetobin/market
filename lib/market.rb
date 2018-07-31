@@ -42,12 +42,24 @@ class Market
   def sell(item, quantity)
     total_inventory
     if total_inventory[item] >= quantity
+      move_stock(item, quantity)
       true
     else
       false
     end
   end
 
-
+  def move_stock(sold, demand)
+    @vendors.each do |vendor|
+      if vendor.inventory.keys.include?(sold) && vendor.inventory[sold] >= demand
+        vendor.inventory[sold] -= demand
+        demand = 0
+      elsif vendor.inventory.keys.include?(sold)
+        difference = demand - vendor.inventory[sold]
+        vendor.inventory[sold] = 0
+        demand = difference
+      end
+    end
+  end
 
 end
