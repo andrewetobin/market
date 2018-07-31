@@ -39,6 +39,15 @@ class Market
     total_inventory
   end
 
+  def sell(item, quantity)
+    total_inventory
+    if total_inventory[item] >= quantity
+      true
+    else
+      false
+    end
+  end
+
 
 
 end

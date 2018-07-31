@@ -89,51 +89,45 @@ class MarketTest < Minitest::Test
     assert_equal expected, @market.total_inventory
   end
 
+  def test_it_can_sell_if_market_has_stock
+    @vendor_1.stock("Peaches", 35)
+    @vendor_1.stock("Tomatoes", 7)
+    @vendor_2.stock("Banana Nice Cream", 50)
+    @vendor_2.stock("Peach-Raspberry Nice Cream", 25)
+    @vendor_3.stock("Peaches", 65)
+    @market.add_vendor(@vendor_1)
+    @market.add_vendor(@vendor_2)
+    @market.add_vendor(@vendor_3)
+
+    assert_equal false, @market.sell("Peaches", 200)
+    assert_equal false, @market.sell("Onions", 1)
+    assert_equal true, @market.sell("Banana Nice Cream", 5)
+  end
+
 
 
 
 
 end
 
-# pry(main)> market = Market.new("South Pearl Street Farmers Market")
-# #=> #<Market:0x00007fe134933e20...>
+# pry(main)> market.sell("Peaches", 200)
+# #=> false
 #
-# pry(main)> vendor_1 = Vendor.new("Rocky Mountain Fresh")
-# #=> #<Vendor:0x00007fe1348a1160...>
+# pry(main)> market.sell("Onions", 1)
+# #=> false
 #
-# pry(main)> vendor_1.stock("Peaches", 35)
-# #=> 35
+# pry(main)> market.sell("Banana Nice Cream", 5)
+# #=> true
 #
-# pry(main)> vendor_1.stock("Tomatoes", 7)
-# #=> 7
+# pry(main)> vendor_2.check_stock("Banana Nice Cream")
+# #=> 45
 #
-# pry(main)> vendor_2 = Vendor.new("Ba-Nom-a-Nom")
-# #=> #<Vendor:0x00007fe1349bed40...>
+# pry(main)> market.sell("Peaches", 40)
+# #=> true
 #
-# pry(main)> vendor_2.stock("Banana Nice Cream", 50)
-# #=> 50
+# pry(main)> vendor_1.check_stock("Peaches")
+# #=> 0
 #
-# pry(main)> vendor_2.stock("Peach-Raspberry Nice Cream", 25)
-# #=> 25
-#
-# pry(main)> vendor_3 = Vendor.new("Palisade Peach Shack")
-# #=> #<Vendor:0x00007fe134910650...>
-#
-# pry(main)> vendor_3.stock("Peaches", 65)
-# #=> 65
-#
-# pry(main)> market.add_vendor(vendor_1)
-# #=> [#<Vendor:0x00007fe1348a1160...>]
-#
-# pry(main)> market.add_vendor(vendor_2)
-# #=> [#<Vendor:0x00007fe1348a1160...>, #<Vendor:0x00007fe1349bed40...>]
-#
-# pry(main)> market.add_vendor(vendor_3)
-# #=> [#<Vendor:0x00007fe1348a1160...>, #<Vendor:0x00007fe1349bed40...>, #<Vendor:0x00007fe134910650...>]
-#
-# pry(main)> market.sorted_item_list
-# #=> ["Banana Nice Cream", "Peach-Raspberry Nice Cream", "Peaches", "Tomatoes"]
-#
-# pry(main)> market.total_inventory
-# #=> {"Peaches"=>100, "Tomatoes"=>7, "Banana Nice Cream"=>50, "Peach-Raspberry Nice Cream"=>25}
+# pry(main)> vendor_3.check_stock("Peaches")
+# #=> 60
 # ```
